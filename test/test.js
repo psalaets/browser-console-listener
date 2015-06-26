@@ -18,7 +18,7 @@ describe('listener', function() {
   });
 
   describe('.listen()', function() {
-    it('adds getters to host object based on option keys', function() {
+    it('adds a getter to host object for each answer', function() {
       listener.listen({
         answers: ['a', 'b']
       });
@@ -42,7 +42,7 @@ describe('listener', function() {
       assert(callbackInvoked);
     });
 
-    it('passes object of selected option when invoking callback', function() {
+    it('passes selected answer when invoking callback', function() {
       var selectedOption;
 
       listener.listen({
