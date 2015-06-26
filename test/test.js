@@ -115,4 +115,32 @@ describe('listener', function() {
     assert.equal(callbackParams.length, 1);
     assert.equal(callbackParams[0], 'd');
   });
+
+  it('can be used for multiple prompt cycles', function() {
+    var callbackParams = [];
+
+    listener.listen({
+      answers: ['a', 'b'],
+      callback: function(selected) {
+        callbackParams.push(selected);
+      }
+    });
+
+    host.b;
+
+    assert.equal(callbackParams.length, 1);
+    assert.equal(callbackParams[0], 'b');
+
+    listener.listen({
+      answers: ['a', 'b'],
+      callback: function(selected) {
+        callbackParams.push(selected);
+      }
+    });
+
+    host.a;
+
+    assert.equal(callbackParams.length, 2);
+    assert.equal(callbackParams[1], 'a');
+  });
 });
