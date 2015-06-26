@@ -85,35 +85,35 @@ describe('prompter', function() {
       assert.equal(callbackParams.length, 1);
       assert.strictEqual(callbackParams[0], optionB);
     });
+  });
 
-    it('can be used for multiple prompt cycles', function() {
-      var callbackParams = [];
-      var optionA = {key: 'a'};
-      var optionB = {key: 'b'};
+  it('can be used for multiple prompt cycles', function() {
+    var callbackParams = [];
+    var optionA = {key: 'a'};
+    var optionB = {key: 'b'};
 
-      prompter.prompt({
-        options: [optionA, optionB],
-        callback: function(selected) {
-          callbackParams.push(selected);
-        }
-      });
-
-      host.b;
-
-      assert.equal(callbackParams.length, 1);
-      assert.strictEqual(callbackParams[0], optionB);
-
-      prompter.prompt({
-        options: [optionA, optionB],
-        callback: function(selected) {
-          callbackParams.push(selected);
-        }
-      });
-
-      host.a;
-
-      assert.equal(callbackParams.length, 2);
-      assert.strictEqual(callbackParams[1], optionA);
+    prompter.prompt({
+      options: [optionA, optionB],
+      callback: function(selected) {
+        callbackParams.push(selected);
+      }
     });
+
+    host.b;
+
+    assert.equal(callbackParams.length, 1);
+    assert.strictEqual(callbackParams[0], optionB);
+
+    prompter.prompt({
+      options: [optionA, optionB],
+      callback: function(selected) {
+        callbackParams.push(selected);
+      }
+    });
+
+    host.a;
+
+    assert.equal(callbackParams.length, 2);
+    assert.strictEqual(callbackParams[1], optionA);
   });
 });
