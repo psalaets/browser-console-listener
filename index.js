@@ -1,7 +1,7 @@
 module.exports = makeListener;
 
 function makeListener(host) {
-  var optionsByKey = {};
+  var currentAnswers = {};
   var callback;
 
   return {
@@ -9,36 +9,34 @@ function makeListener(host) {
   };
 
   function listen(config) {
-    config.options.forEach(function(option) {
-      ensureGetterByOptionKey(host, option);
+    config.answers.forEach(function(answer) {
+      ensureGetter(host, answer);
 
-      optionsByKey[option.key] = option;
+      currentAnswers[answer] = answer;
     });
 
     callback = config.callback;
   }
 
-  function ensureGetterByOptionKey(host, option) {
-    if (option.key in host) return;
+  function ensureGetter(host, answer) {
+    if (answer in host) return;
 
-    Object.defineProperty(host, option.key, {
+    Object.defineProperty(host, answer, {
       get: function() {
-        runCallbackWithAssociatedOption(option.key);
+        runCallbackForAnswer(answer);
       }
     });
   }
 
-  function runCallbackWithAssociatedOption(key) {
-    var option = optionsByKey[key];
-
-    if (option) {
-      callback(option);
+  function runCallbackForAnswer(answer) {
+    if (answer in currentAnswers) {
+      callback(answer);
       reset();
     }
   }
 
   function reset() {
-    optionsByKey = {};
+    currentAnswers = {};
     callback = null;
   }
 }

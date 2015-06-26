@@ -20,11 +20,7 @@ describe('listener', function() {
   describe('.listen()', function() {
     it('adds getters to host object based on option keys', function() {
       listener.listen({
-        options: [{
-          key: 'a'
-        }, {
-          key: 'b'
-        }]
+        answers: ['a', 'b']
       });
 
       assert('a' in host);
@@ -35,11 +31,7 @@ describe('listener', function() {
       var callbackInvoked = false;
 
       listener.listen({
-        options: [{
-          key: 'a'
-        }, {
-          key: 'b'
-        }],
+        answers: ['a', 'b'],
         callback: function() {
           callbackInvoked = true;
         }
@@ -52,11 +44,9 @@ describe('listener', function() {
 
     it('passes object of selected option when invoking callback', function() {
       var selectedOption;
-      var optionA = {key: 'a'};
-      var optionB = {key: 'b'};
 
       listener.listen({
-        options: [optionA, optionB],
+        answers: ['a', 'b'],
         callback: function(selected) {
           selectedOption = selected;
         }
@@ -64,16 +54,14 @@ describe('listener', function() {
 
       host.b;
 
-      assert.strictEqual(selectedOption, optionB);
+      assert.equal(selectedOption, 'b');
     });
 
     it('only invokes callback for first getter accessed', function() {
       var callbackParams = [];
-      var optionA = {key: 'a'};
-      var optionB = {key: 'b'};
 
       listener.listen({
-        options: [optionA, optionB],
+        answers: ['a', 'b'],
         callback: function(selected) {
           callbackParams.push(selected);
         }
@@ -83,17 +71,15 @@ describe('listener', function() {
       host.a;
 
       assert.equal(callbackParams.length, 1);
-      assert.strictEqual(callbackParams[0], optionB);
+      assert.equal(callbackParams[0], 'b');
     });
   });
 
   it('can be used for multiple prompt cycles', function() {
     var callbackParams = [];
-    var optionA = {key: 'a'};
-    var optionB = {key: 'b'};
 
     listener.listen({
-      options: [optionA, optionB],
+      answers: ['a', 'b'],
       callback: function(selected) {
         callbackParams.push(selected);
       }
@@ -102,10 +88,10 @@ describe('listener', function() {
     host.b;
 
     assert.equal(callbackParams.length, 1);
-    assert.strictEqual(callbackParams[0], optionB);
+    assert.equal(callbackParams[0], 'b');
 
     listener.listen({
-      options: [optionA, optionB],
+      answers: ['a', 'b'],
       callback: function(selected) {
         callbackParams.push(selected);
       }
@@ -114,6 +100,6 @@ describe('listener', function() {
     host.a;
 
     assert.equal(callbackParams.length, 2);
-    assert.strictEqual(callbackParams[1], optionA);
+    assert.equal(callbackParams[1], 'a');
   });
 });
