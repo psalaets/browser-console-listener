@@ -7,13 +7,17 @@ function makePrompter(host) {
 
   function prompt(config) {
     config.options.forEach(function(option) {
-      defineGetter(host, option.key);
+      defineGetter(host, option.key, config.callback);
     });
+
+
   }
 
-  function defineGetter(host, propertyName) {
+  function defineGetter(host, propertyName, callback) {
     Object.defineProperty(host, propertyName, {
-      get: function() {}
+      get: function() {
+        callback();
+      }
     });
   }
 }
