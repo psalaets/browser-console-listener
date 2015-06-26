@@ -1,23 +1,42 @@
 module.exports = makePrompter;
 
 function makePrompter(host) {
+  var optionsByKey = {};
+  var callback;
+
   return {
     prompt: prompt
   };
 
   function prompt(config) {
     config.options.forEach(function(option) {
-      defineGetter(host, option.key, config.callback);
+      defineGetterByOptionKey(host, option);
+
+      optionsByKey[option.key] = option;
     });
 
-
+    callback = config.callback;
   }
 
-  function defineGetter(host, propertyName, callback) {
-    Object.defineProperty(host, propertyName, {
+  function defineGetterByOptionKey(host, option) {
+    Object.defineProperty(host, option.key, {
       get: function() {
-        callback();
+        runCallbackWithAssociatedOption(option.key);
       }
     });
+  }
+
+  function runCallbackWithAssociatedOption(key) {
+    var option = optionsByKey[key];
+
+    if (option) {
+      callback(option);
+      reset();
+    }
+  }
+
+  function reset() {
+    optionsByKey = {};
+    callback = null;
   }
 }

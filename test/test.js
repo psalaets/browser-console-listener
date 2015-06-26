@@ -49,5 +49,41 @@ describe('prompter', function() {
 
       assert(callbackInvoked);
     });
+
+    it('passes object of selected option when invoking callback', function() {
+      var selectedOption;
+      var optionA = {key: 'a'};
+      var optionB = {key: 'b'};
+
+      prompter.prompt({
+        options: [optionA, optionB],
+        callback: function(selected) {
+          selectedOption = selected;
+        }
+      });
+
+      host.b;
+
+      assert.strictEqual(selectedOption, optionB);
+    });
+
+    it('only invokes callback for first getter accessed', function() {
+      var callbackParams = [];
+      var optionA = {key: 'a'};
+      var optionB = {key: 'b'};
+
+      prompter.prompt({
+        options: [optionA, optionB],
+        callback: function(selected) {
+          callbackParams.push(selected);
+        }
+      });
+
+      host.b;
+      host.a;
+
+      assert.equal(callbackParams.length, 1);
+      assert.strictEqual(callbackParams[0], optionB);
+    });
   });
 });
