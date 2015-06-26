@@ -5,7 +5,8 @@ function makeListener(host) {
   var callback;
 
   return {
-    listen: listen
+    listen: listen,
+    cancel: reset
   };
 
   function listen(config) {

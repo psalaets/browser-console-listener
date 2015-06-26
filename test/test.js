@@ -17,7 +17,7 @@ describe('listener', function() {
     listener = bcp(host);
   });
 
-  describe('.listen()', function() {
+  describe('#listen()', function() {
     it('adds a getter to host object for each answer', function() {
       listener.listen({
         answers: ['a', 'b']
@@ -101,5 +101,20 @@ describe('listener', function() {
 
     assert.equal(callbackParams.length, 2);
     assert.equal(callbackParams[1], 'a');
+  });
+
+  describe('#cancel()', function () {
+    it('cancels a previous listen()', function() {
+      listener.listen({
+        answers: ['a', 'b'],
+        callback: function(answer) {
+          throw new Error('callback should not have fired but it did, arg: ' + answer);
+        }
+      });
+
+      listener.cancel();
+
+      host.a;
+    });
   });
 });
