@@ -10,6 +10,8 @@ function makeListener(host) {
   };
 
   function listen(config) {
+    reset();
+
     config.answers.forEach(function(answer) {
       ensureGetter(host, answer);
 

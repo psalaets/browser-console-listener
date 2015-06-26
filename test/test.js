@@ -75,34 +75,6 @@ describe('listener', function() {
     });
   });
 
-  it('can be used for multiple prompt cycles', function() {
-    var callbackParams = [];
-
-    listener.listen({
-      answers: ['a', 'b'],
-      callback: function(selected) {
-        callbackParams.push(selected);
-      }
-    });
-
-    host.b;
-
-    assert.equal(callbackParams.length, 1);
-    assert.equal(callbackParams[0], 'b');
-
-    listener.listen({
-      answers: ['a', 'b'],
-      callback: function(selected) {
-        callbackParams.push(selected);
-      }
-    });
-
-    host.a;
-
-    assert.equal(callbackParams.length, 2);
-    assert.equal(callbackParams[1], 'a');
-  });
-
   describe('#cancel()', function () {
     it('cancels a previous listen()', function() {
       listener.listen({
@@ -116,5 +88,31 @@ describe('listener', function() {
 
       host.a;
     });
+  });
+
+  it('can start a listen() without canceling previous one', function() {
+    var callbackParams = [];
+
+    listener.listen({
+      answers: ['a', 'b'],
+      callback: function(selected) {
+        throw new Error('first callback should not have fired but it did, arg: ' + answer);
+      }
+    });
+
+    listener.listen({
+      answers: ['c', 'd'],
+      callback: function(selected) {
+        callbackParams.push(selected);
+      }
+    });
+
+    // should have no effect
+    host.a;
+
+    host.d;
+
+    assert.equal(callbackParams.length, 1);
+    assert.equal(callbackParams[0], 'd');
   });
 });
