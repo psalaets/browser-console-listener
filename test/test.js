@@ -1,9 +1,9 @@
 var assert = require('assert');
-var bcp = require('../');
+var bcal = require('../');
 
 describe('module export', function() {
   it('creates a listener when called', function() {
-    var listener = bcp({});
+    var listener = bcal({});
 
     assert(listener);
   });
@@ -14,7 +14,7 @@ describe('listener', function() {
 
   beforeEach(function() {
     host = {};
-    listener = bcp(host);
+    listener = bcal(host);
   });
 
   describe('#listen()', function() {
