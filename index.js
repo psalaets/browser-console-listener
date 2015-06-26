@@ -1,14 +1,14 @@
-module.exports = makePrompter;
+module.exports = makeListener;
 
-function makePrompter(host) {
+function makeListener(host) {
   var optionsByKey = {};
   var callback;
 
   return {
-    prompt: prompt
+    listen: listen
   };
 
-  function prompt(config) {
+  function listen(config) {
     config.options.forEach(function(option) {
       ensureGetterByOptionKey(host, option);
 

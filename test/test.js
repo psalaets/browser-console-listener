@@ -2,24 +2,24 @@ var assert = require('assert');
 var bcp = require('../');
 
 describe('module export', function() {
-  it('creates a prompter when called', function() {
-    var prompter = bcp({});
+  it('creates a listener when called', function() {
+    var listener = bcp({});
 
-    assert(prompter);
+    assert(listener);
   });
 });
 
-describe('prompter', function() {
-  var prompter, host;
+describe('listener', function() {
+  var listener, host;
 
   beforeEach(function() {
     host = {};
-    prompter = bcp(host);
+    listener = bcp(host);
   });
 
-  describe('.prompt()', function() {
+  describe('.listen()', function() {
     it('adds getters to host object based on option keys', function() {
-      prompter.prompt({
+      listener.listen({
         options: [{
           key: 'a'
         }, {
@@ -34,7 +34,7 @@ describe('prompter', function() {
     it('invokes callback when a getter on host is accessed', function() {
       var callbackInvoked = false;
 
-      prompter.prompt({
+      listener.listen({
         options: [{
           key: 'a'
         }, {
@@ -55,7 +55,7 @@ describe('prompter', function() {
       var optionA = {key: 'a'};
       var optionB = {key: 'b'};
 
-      prompter.prompt({
+      listener.listen({
         options: [optionA, optionB],
         callback: function(selected) {
           selectedOption = selected;
@@ -72,7 +72,7 @@ describe('prompter', function() {
       var optionA = {key: 'a'};
       var optionB = {key: 'b'};
 
-      prompter.prompt({
+      listener.listen({
         options: [optionA, optionB],
         callback: function(selected) {
           callbackParams.push(selected);
@@ -92,7 +92,7 @@ describe('prompter', function() {
     var optionA = {key: 'a'};
     var optionB = {key: 'b'};
 
-    prompter.prompt({
+    listener.listen({
       options: [optionA, optionB],
       callback: function(selected) {
         callbackParams.push(selected);
@@ -104,7 +104,7 @@ describe('prompter', function() {
     assert.equal(callbackParams.length, 1);
     assert.strictEqual(callbackParams[0], optionB);
 
-    prompter.prompt({
+    listener.listen({
       options: [optionA, optionB],
       callback: function(selected) {
         callbackParams.push(selected);
