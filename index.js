@@ -10,7 +10,7 @@ function makePrompter(host) {
 
   function prompt(config) {
     config.options.forEach(function(option) {
-      defineGetterByOptionKey(host, option);
+      ensureGetterByOptionKey(host, option);
 
       optionsByKey[option.key] = option;
     });
@@ -18,7 +18,9 @@ function makePrompter(host) {
     callback = config.callback;
   }
 
-  function defineGetterByOptionKey(host, option) {
+  function ensureGetterByOptionKey(host, option) {
+    if (option.key in host) return;
+
     Object.defineProperty(host, option.key, {
       get: function() {
         runCallbackWithAssociatedOption(option.key);
