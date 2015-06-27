@@ -3,47 +3,61 @@ module.exports = makeListener;
 
 function makeListener(host) {
   var currentAnswers = {};
-  var callback;
+  var userCallback;
 
   return {
     listen: listen,
     cancel: reset
   };
 
-  function listen(config) {
+  function listen(answers, callback) {
+    if (!Array.isArray(answers)) {
+      throw new Error('answers must be an Array');
+    }
+
+    if (typeof callback != 'function') {
+      throw new Error('callback must be a function');
+    }
+
     reset();
 
-    config.answers.forEach(function(answer) {
-      ensureGetter(host, answer);
+    answers.forEach(function(answer) {
+      createGetter(host, answer);
 
       currentAnswers[answer] = answer;
     });
 
-    callback = config.callback;
+    userCallback = callback;
   }
 
-  function ensureGetter(host, answer) {
-    if (answer in host) return;
+  function createGetter(host, answer) {
+    if (answer in host) {
+      throw new Error('Property is already defined on host object, host[\'' + answer + '\'] is: ' + host[answer]);
+    }
 
     Object.defineProperty(host, answer, {
       get: function() {
         runCallbackForAnswer(answer);
-      }
+      },
+      configurable: true
     });
   }
 
   function runCallbackForAnswer(answer) {
     if (answer in currentAnswers) {
-      callback(answer);
+      userCallback(answer);
       reset();
     }
   }
 
   function reset() {
+    for (var answer in currentAnswers) {
+      delete host[answer];
+    }
+
     currentAnswers = {};
-    callback = null;
+    userCallback = null;
   }
 }
-
 },{}]},{},[1])(1)
 });
