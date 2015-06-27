@@ -13,7 +13,7 @@ function makeListener(host) {
     reset();
 
     answers.forEach(function(answer) {
-      ensureGetter(host, answer);
+      createGetter(host, answer);
 
       currentAnswers[answer] = answer;
     });
@@ -21,13 +21,16 @@ function makeListener(host) {
     userCallback = callback;
   }
 
-  function ensureGetter(host, answer) {
-    if (answer in host) return;
+  function createGetter(host, answer) {
+    if (answer in host) {
+      throw new Error('Property is already defined on host object, host[\'' + answer + '\'] is: ' + host[answer]);
+    }
 
     Object.defineProperty(host, answer, {
       get: function() {
         runCallbackForAnswer(answer);
-      }
+      },
+      configurable: true
     });
   }
 
@@ -39,6 +42,10 @@ function makeListener(host) {
   }
 
   function reset() {
+    for (var answer in currentAnswers) {
+      delete host[answer];
+    }
+
     currentAnswers = {};
     userCallback = null;
   }

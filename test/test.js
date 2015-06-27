@@ -25,6 +25,14 @@ describe('listener', function() {
       assert('b' in host);
     });
 
+    it('throws Error if host has properties with same name as answers', function() {
+      host.a = 'already here';
+
+      assert.throws(function() {
+        listener.listen(['a', 'b']);
+      }, Error);
+    });
+
     it('invokes callback when a getter on host is accessed', function() {
       var callbackInvoked = false;
 
@@ -73,6 +81,20 @@ describe('listener', function() {
       listener.cancel();
 
       host.a;
+    });
+
+    it('removes getters from host object', function() {
+      listener.listen(['a', 'b'], function(answer) {
+        throw new Error('callback should not have fired but it did, arg: ' + answer);
+      });
+
+      assert('a' in host);
+      assert('b' in host);
+
+      listener.cancel();
+
+      assert(!('a' in host));
+      assert(!('b' in host));
     });
   });
 
