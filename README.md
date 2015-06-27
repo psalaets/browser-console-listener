@@ -28,15 +28,15 @@ Listen for an answer.
 
 #### answers
 
-Array of strings. A getter will be defined on host object for each answer. That cannot already be a property on host object with same name as any answer.
+Array of strings. A getter will be defined on host object for each answer. There cannot already be a property on host object with same name as any answer.
 
 #### callback
 
-Function invoked when user types an answer. It is passed the answer (string).
+Function invoked when user types an answer. It is passed the selected answer (string).
 
 ## Install
 
-npm install browser-console-listener
+`npm install browser-console-listener`
 
 ## License
 
