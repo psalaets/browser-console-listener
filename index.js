@@ -2,23 +2,23 @@ module.exports = makeListener;
 
 function makeListener(host) {
   var currentAnswers = {};
-  var callback;
+  var userCallback;
 
   return {
     listen: listen,
     cancel: reset
   };
 
-  function listen(config) {
+  function listen(answers, callback) {
     reset();
 
-    config.answers.forEach(function(answer) {
+    answers.forEach(function(answer) {
       ensureGetter(host, answer);
 
       currentAnswers[answer] = answer;
     });
 
-    callback = config.callback;
+    userCallback = callback;
   }
 
   function ensureGetter(host, answer) {
@@ -33,13 +33,13 @@ function makeListener(host) {
 
   function runCallbackForAnswer(answer) {
     if (answer in currentAnswers) {
-      callback(answer);
+      userCallback(answer);
       reset();
     }
   }
 
   function reset() {
     currentAnswers = {};
-    callback = null;
+    userCallback = null;
   }
 }

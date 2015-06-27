@@ -19,9 +19,7 @@ describe('listener', function() {
 
   describe('#listen()', function() {
     it('adds a getter to host object for each answer', function() {
-      listener.listen({
-        answers: ['a', 'b']
-      });
+      listener.listen(['a', 'b']);
 
       assert('a' in host);
       assert('b' in host);
@@ -30,11 +28,8 @@ describe('listener', function() {
     it('invokes callback when a getter on host is accessed', function() {
       var callbackInvoked = false;
 
-      listener.listen({
-        answers: ['a', 'b'],
-        callback: function() {
-          callbackInvoked = true;
-        }
+      listener.listen(['a', 'b'], function() {
+        callbackInvoked = true;
       });
 
       host.a;
@@ -45,11 +40,8 @@ describe('listener', function() {
     it('passes selected answer when invoking callback', function() {
       var selectedOption;
 
-      listener.listen({
-        answers: ['a', 'b'],
-        callback: function(selected) {
-          selectedOption = selected;
-        }
+      listener.listen(['a', 'b'], function(selected) {
+        selectedOption = selected;
       });
 
       host.b;
@@ -60,11 +52,8 @@ describe('listener', function() {
     it('only invokes callback for first getter accessed', function() {
       var callbackParams = [];
 
-      listener.listen({
-        answers: ['a', 'b'],
-        callback: function(selected) {
-          callbackParams.push(selected);
-        }
+      listener.listen(['a', 'b'], function(selected) {
+        callbackParams.push(selected);
       });
 
       host.b;
@@ -77,11 +66,8 @@ describe('listener', function() {
 
   describe('#cancel()', function () {
     it('cancels a previous listen()', function() {
-      listener.listen({
-        answers: ['a', 'b'],
-        callback: function(answer) {
-          throw new Error('callback should not have fired but it did, arg: ' + answer);
-        }
+      listener.listen(['a', 'b'], function(answer) {
+        throw new Error('callback should not have fired but it did, arg: ' + answer);
       });
 
       listener.cancel();
@@ -93,18 +79,12 @@ describe('listener', function() {
   it('can start a listen() without canceling previous one', function() {
     var callbackParams = [];
 
-    listener.listen({
-      answers: ['a', 'b'],
-      callback: function(selected) {
-        throw new Error('first callback should not have fired but it did, arg: ' + answer);
-      }
+    listener.listen(['a', 'b'], function(selected) {
+      throw new Error('first callback should not have fired but it did, arg: ' + answer);
     });
 
-    listener.listen({
-      answers: ['c', 'd'],
-      callback: function(selected) {
-        callbackParams.push(selected);
-      }
+    listener.listen(['c', 'd'], function(selected) {
+      callbackParams.push(selected);
     });
 
     // should have no effect
@@ -119,11 +99,8 @@ describe('listener', function() {
   it('can be used for multiple prompt cycles', function() {
     var callbackParams = [];
 
-    listener.listen({
-      answers: ['a', 'b'],
-      callback: function(selected) {
-        callbackParams.push(selected);
-      }
+    listener.listen(['a', 'b'], function(selected) {
+      callbackParams.push(selected);
     });
 
     host.b;
@@ -131,11 +108,8 @@ describe('listener', function() {
     assert.equal(callbackParams.length, 1);
     assert.equal(callbackParams[0], 'b');
 
-    listener.listen({
-      answers: ['a', 'b'],
-      callback: function(selected) {
-        callbackParams.push(selected);
-      }
+    listener.listen(['a', 'b'], function(selected) {
+      callbackParams.push(selected);
     });
 
     host.a;
