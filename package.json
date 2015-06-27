@@ -1,7 +1,7 @@
 {
   "name": "browser-console-listener",
   "version": "1.0.0",
-  "description": "",
+  "description": "Listen for things typed in the browser console",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
