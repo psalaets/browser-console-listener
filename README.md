@@ -20,7 +20,7 @@ listener.listen(['yes', 'no'], function(selection) {
 ### var bcl = require('browser-console-listener')
 ### var listener = bcl(host)
 
-Create a listener for the given host object. Pass `window` as `host` to acheive the desired effect in browser console.
+Create a listener for the given host object. Pass `window` as `host` to achieve the desired effect in browser console.
 
 ### listener.listen(answers, callback)
 
