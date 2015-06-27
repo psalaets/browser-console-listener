@@ -18,8 +18,20 @@ describe('listener', function() {
   });
 
   describe('#listen()', function() {
+    it('requires array as first argument', function() {
+      assert.throws(function() {
+        listener.listen('a', function() {});
+      }, Error);
+    });
+
+    it('requires function as second argument', function() {
+      assert.throws(function() {
+        listener.listen(['a'], 'b');
+      }, Error);
+    });
+
     it('adds a getter to host object for each answer', function() {
-      listener.listen(['a', 'b']);
+      listener.listen(['a', 'b'], function() {});
 
       assert('a' in host);
       assert('b' in host);

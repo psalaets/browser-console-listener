@@ -10,6 +10,14 @@ function makeListener(host) {
   };
 
   function listen(answers, callback) {
+    if (!Array.isArray(answers)) {
+      throw new Error('answers must be an Array');
+    }
+
+    if (typeof callback != 'function') {
+      throw new Error('callback must be a function');
+    }
+
     reset();
 
     answers.forEach(function(answer) {
