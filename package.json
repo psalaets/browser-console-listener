@@ -1,6 +1,6 @@
 {
   "name": "browser-console-listener",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Listen for things typed in the browser console",
   "main": "index.js",
   "scripts": {

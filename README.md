@@ -42,6 +42,8 @@ Stop listening for answers. Remove getters from host object.
 
 `npm install browser-console-listener`
 
+`bower install browser-console-listener`
+
 ## License
 
 MIT
