@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rm -rf build; mkdir build",
+    "build": "browserify index.js -s browser-console-listener > build/bcl.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "10.2.4",
     "mocha": "2.2.5"
   }
 }
