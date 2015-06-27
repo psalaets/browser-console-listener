@@ -21,13 +21,13 @@ describe('listener', function() {
     it('requires array as first argument', function() {
       assert.throws(function() {
         listener.listen('a', function() {});
-      }, Error);
+      }, /must be an Array/);
     });
 
     it('requires function as second argument', function() {
       assert.throws(function() {
         listener.listen(['a'], 'b');
-      }, Error);
+      }, /must be a function/);
     });
 
     it('adds a getter to host object for each answer', function() {
@@ -41,8 +41,8 @@ describe('listener', function() {
       host.a = 'already here';
 
       assert.throws(function() {
-        listener.listen(['a', 'b']);
-      }, Error);
+        listener.listen(['a', 'b'], function() {});
+      }, /is already defined/);
     });
 
     it('invokes callback when a getter on host is accessed', function() {
