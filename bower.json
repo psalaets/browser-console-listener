@@ -1,0 +1,25 @@
+{
+  "name": "browser-console-listener",
+  "main": "build/bcl.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/psalaets/browser-console-listener",
+  "authors": [
+    "Paul Salaets <psalaets@gmail.com>"
+  ],
+  "description": "Listen for things typed in the browser console",
+  "keywords": [
+    "browser",
+    "console",
+    "prompt",
+    "answer",
+    "listener"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
