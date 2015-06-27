@@ -17,17 +17,68 @@ describe('listener', function() {
     listener = bcl(host);
   });
 
-  describe('#listen()', function() {
-    it('requires array as first argument', function() {
-      assert.throws(function() {
-        listener.listen('a', function() {});
-      }, /must be an Array/);
+  describe('#listen(answers, callback)', function() {
+    describe('answers', function () {
+      it('must be an array', function() {
+        assert.throws(function() {
+          listener.listen('a', function() {});
+        }, /must be an Array/);
+      });
+
+      it('cannot contain names that are already defined on host', function() {
+        host.a = 'already here';
+
+        assert.throws(function() {
+          listener.listen(['a', 'b'], function() {});
+        }, /is already defined/);
+      });
+
     });
 
-    it('requires function as second argument', function() {
-      assert.throws(function() {
-        listener.listen(['a'], 'b');
-      }, /must be a function/);
+    describe('callback', function () {
+      it('must be a function', function() {
+        assert.throws(function() {
+          listener.listen(['a'], 'b');
+        }, /must be a function/);
+      });
+
+      it('is invoked when a getter on host is accessed', function() {
+        var callbackInvoked = false;
+
+        listener.listen(['a', 'b'], function() {
+          callbackInvoked = true;
+        });
+
+        host.a;
+
+        assert(callbackInvoked);
+      });
+
+      it('receives selected answer', function() {
+        var selectedOption;
+
+        listener.listen(['a', 'b'], function(selected) {
+          selectedOption = selected;
+        });
+
+        host.b;
+
+        assert.equal(selectedOption, 'b');
+      });
+
+      it('is only invoked for the first getter accessed', function() {
+        var callbackParams = [];
+
+        listener.listen(['a', 'b'], function(selected) {
+          callbackParams.push(selected);
+        });
+
+        host.b;
+        host.a;
+
+        assert.equal(callbackParams.length, 1);
+        assert.equal(callbackParams[0], 'b');
+      });
     });
 
     it('adds a getter to host object for each answer', function() {
@@ -35,52 +86,6 @@ describe('listener', function() {
 
       assert('a' in host);
       assert('b' in host);
-    });
-
-    it('throws Error if host has properties with same name as answers', function() {
-      host.a = 'already here';
-
-      assert.throws(function() {
-        listener.listen(['a', 'b'], function() {});
-      }, /is already defined/);
-    });
-
-    it('invokes callback when a getter on host is accessed', function() {
-      var callbackInvoked = false;
-
-      listener.listen(['a', 'b'], function() {
-        callbackInvoked = true;
-      });
-
-      host.a;
-
-      assert(callbackInvoked);
-    });
-
-    it('passes selected answer when invoking callback', function() {
-      var selectedOption;
-
-      listener.listen(['a', 'b'], function(selected) {
-        selectedOption = selected;
-      });
-
-      host.b;
-
-      assert.equal(selectedOption, 'b');
-    });
-
-    it('only invokes callback for first getter accessed', function() {
-      var callbackParams = [];
-
-      listener.listen(['a', 'b'], function(selected) {
-        callbackParams.push(selected);
-      });
-
-      host.b;
-      host.a;
-
-      assert.equal(callbackParams.length, 1);
-      assert.equal(callbackParams[0], 'b');
     });
   });
 
@@ -95,7 +100,7 @@ describe('listener', function() {
       host.a;
     });
 
-    it('removes getters from host object', function() {
+    it('removes answer getters from host object', function() {
       listener.listen(['a', 'b'], function(answer) {
         throw new Error('callback should not have fired but it did, arg: ' + answer);
       });
@@ -110,7 +115,7 @@ describe('listener', function() {
     });
   });
 
-  it('can start a listen() without canceling previous one', function() {
+  it('can start a listen() without canceling previous listen()', function() {
     var callbackParams = [];
 
     listener.listen(['a', 'b'], function(selected) {
