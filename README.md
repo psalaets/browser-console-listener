@@ -34,6 +34,10 @@ Array of strings. A getter will be defined on host object for each answer. There
 
 Function invoked when user types an answer. It is passed the selected answer (string).
 
+### listener.cancel()
+
+Stop listening for answers. Remove getters from host object.
+
 ## Install
 
 `npm install browser-console-listener`
